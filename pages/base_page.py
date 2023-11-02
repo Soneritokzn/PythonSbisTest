@@ -1,7 +1,6 @@
-from selenium.webdriver.support.ui import WebDriverWait as Wait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait as Wait
 from selenium.webdriver.support.wait import WebDriverWait
-from locators.locators import PageLocators as Locators
 
 
 class BasePage:
@@ -18,7 +17,7 @@ class BasePage:
     def elements_are_visible(self, locator, timeout=30):
         return Wait(self.driver, timeout).until(EC.visibility_of_all_elements_located(locator))
 
-    def elements_are_collected(self, locator, timeout=5):
+    def elements_are_collected(self, locator, timeout=40):
         return Wait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
     def window_switcher(self, expected_url):
@@ -27,9 +26,8 @@ class BasePage:
         for window_handle in self.driver.window_handles:
             self.driver.switch_to.window(window_handle)
             if expected_url in self.driver.current_url:
-                return  # Нашли нужное окно
+                return
 
-        # Если нужное окно не было найдено
         self.driver.switch_to.window(main_window_handle)
 
     def check_current_url(self, expected_url):
@@ -41,8 +39,6 @@ class BasePage:
 
     def wait_for_load(self):
         WebDriverWait(self.driver, 40).until(EC.url_to_be("https://tensor.ru"))
-
-
 
 
 
